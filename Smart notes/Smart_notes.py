@@ -3,8 +3,9 @@ print("Hello, welcome to Smart Notes :)")
 choices = {'Write':'w',
         'Show all notes': 's',
         'Delete a note' : 'd',
-        'Exit':'x',
-        'Search notes': 'f'}
+        'Search notes': 'f',
+        'Exit':'x'
+}
 
 filename = '/home/fa1rusz/p/py_basic/Smart notes/notes.txt'
 
@@ -86,6 +87,21 @@ while True:
                 else:
                     print("Invalid choice. Try again.")
                     continue
+
+    elif choice == 'f':
+        with open(filename) as f:
+            notes = f.readlines()
+        
+        keyword = input('keyword to search: ').strip()
+        
+        found = False
+        for i,note in enumerate(notes,start=1):
+            if keyword.lower() in note.lower():
+                found = True
+                print(f'{i}. {note}')
+
+        if not found:
+            print("No matching notes.")
 
     elif choice == 'x':
         print("\nHave a nice day :)")
