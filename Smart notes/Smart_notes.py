@@ -3,7 +3,8 @@ print("Hello, welcome to Smart Notes :)")
 choices = {'Write':'w',
         'Show all notes': 's',
         'Delete a note' : 'd',
-        'Exit':'x'}
+        'Exit':'x',
+        'Search notes': 'f'}
 
 filename = '/home/fa1rusz/p/py_basic/Smart notes/notes.txt'
 
@@ -61,27 +62,29 @@ while True:
             continue
 
         # Print all notes with number of lines
-        print("Your notes:")
+        print("\nYour notes:")
         for i,note in enumerate(notes,start=1):
             print(f'{i}. {note}',end='')
         print()
 
         # Loop to input valid number
         while True:
-            if not notes:
-                print("No notes to delete.")
-                break
-            else:
-                delete = int(input('Enter a line number: '))
+                delete_str = input('Enter a line number: ')
+                
+                if not delete_str.isdigit():
+                    print("Please enter a number.")
+                    continue
+                
+                delete = int(delete_str)
             
-                if 1 <= delete <= len(note):
+                if 1 <= delete <= len(notes):
                     notes.pop(delete-1)
                     with open(filename,'w') as f:
                         f.writelines(notes)
                     print("Note deleted successfully.")
                     break
-                elif delete > lines:
-                    print("Invalid input")
+                else:
+                    print("Invalid choice. Try again.")
                     continue
 
     elif choice == 'x':
