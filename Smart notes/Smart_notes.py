@@ -4,6 +4,7 @@ choices = {'Write':'w',
         'Show all notes': 's',
         'Delete a note' : 'd',
         'Search notes': 'f',
+        'Edit': 'e',
         'Exit':'x'
 }
 
@@ -43,6 +44,7 @@ while True:
         try:
             with open(filename,'r') as f:
                 print()
+                print('All notes:')
                 print(f.read())
                 print()
         except FileNotFoundError:
@@ -102,6 +104,31 @@ while True:
 
         if not found:
             print("No matching notes.")
+
+    elif choice == 'e':
+        with open(filename) as f:
+            notes = f.readlines()
+        if not notes:
+            print('Note are empty')
+            continue
+        for i,note in enumerate(notes,start=1):
+            print(f"{i}. {note}",end='')
+            print()
+
+        while True:
+            line_str = input("Enter a line number: ")
+            if line_str.isdigit():
+                line = int(line_str)
+                if 1 <= line <= len(notes):
+                    break
+            print("Invalid line number.")
+        
+        new_text = input("New text: ")
+        notes[line -1 ] = new_text + "\n"
+        
+        with open(filename,'w') as f:
+            f.writelines(notes)
+        print("Note update successfully.")
 
     elif choice == 'x':
         print("\nHave a nice day :)")
