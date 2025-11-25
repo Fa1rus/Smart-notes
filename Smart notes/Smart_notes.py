@@ -1,14 +1,22 @@
-print("Hello, welcome to Smart Notes :)")
+print("Hello, welcome to Smart Notes")
 
-choices = {'Write':'w',
-        'Show all notes': 's',
-        'Delete a note' : 'd',
-        'Search notes': 'f',
-        'Edit': 'e',
-        'Exit':'x'
+choices = {
+    'Write':'w',
+    'Show all notes': 's',
+    'Delete a note' : 'd',
+    'Search notes': 'f',
+    'Edit': 'e',
+    'Exit':'x'
 }
 
-filename = '/home/fa1rusz/p/py_basic/Smart notes/notes.txt'
+categories = {
+    '1': ("Personal", "personal.txt"),
+    '2': ("Study", "study.txt"),
+    '3': ("Work", "work.txt"),
+    '4': ("Ideas", "ideas.txt")
+}
+
+filename = 'notes.txt'
 
 # Check if users are choose the righ choice
 def check_choice():
@@ -17,12 +25,30 @@ def check_choice():
         if choice in choices.values():
             return choice
         else:
-            print("Please choose a valid option!")
+            print("Invalid option, Please Try again.")
             continue
 
-def valid_number(numCheck):
+def show_category(categories):
+    for i,g in categories.items():
+        print(f'{i}. {g[0]}',end='')
+        print()
+
+def choose_category():
+    show_category(categories)
+    print("Enter category number")
     while True:
+        category = str(valid_number())
+        if category in categories:
+            return category
+        else:
+            print("Invalid choice.")
+            continue
+    
+def valid_number():
+    while True:
+        numCheck = input("\tChoice: ")
         if not numCheck.isdigit():
+            print("Invalid input.")
             continue
         else:
             return int(numCheck)
@@ -36,10 +62,15 @@ def show_notes():
     try:
         with open(filename,'r') as f:
             print()
-            print(f.read())
+            note = f.read()
+            if note == '':
+                print("Nothing here.")
+            else:
+                print(note)
             print()
     except FileNotFoundError:
         print("No notes found yet.")
+        return
         
 def delete_note():
     try:
@@ -62,8 +93,8 @@ def delete_note():
 
     # Loop to input valid number
     while True:
-            delete_str = input('Enter a line number: ')
-            delete = valid_number(delete_str)
+            print('Enter a line number')
+            delete = valid_number()
             
             if 1 <= delete <= len(notes):
                 notes.pop(delete-1)
@@ -76,8 +107,12 @@ def delete_note():
                 continue
     
 def search_note():
-    with open(filename) as f:
-        notes = f.readlines()
+    try:
+        with open(filename) as f:
+            notes = f.readlines()
+    except FileNotFoundError:
+        print("No notes found yet.")
+        return
     
     keyword = input('keyword to search: ').strip()
     
@@ -91,8 +126,13 @@ def search_note():
         print("No matching notes.")
 
 def edit_note():
-    with open(filename) as f:
-        notes = f.readlines()
+    try:
+        with open(filename) as f:
+            notes = f.readlines()
+    except FileNotFoundError:
+        print("No notes found yet.")
+        return
+
     if not notes:
         print('Note are empty')
         return
@@ -117,29 +157,27 @@ def edit_note():
 
 def choose_mode(ChoiceInput):
     # Mode write
-    if choice == 'w':
+    if ChoiceInput == 'w':
         write_note()
-    
     # Mode show all notes
-    elif choice == 's':
+    elif ChoiceInput == 's':
         show_notes()
-
     # Mode delete
-    elif choice == 'd':
+    elif ChoiceInput == 'd':
         delete_note()
-
     # Mode search
-    elif choice == 'f':
+    elif ChoiceInput == 'f':
         search_note()
-
     # Mode edit
-    elif choice == 'e':
+    elif ChoiceInput == 'e':
         edit_note()
-
-    elif choice == 'x':
+    elif ChoiceInput == 'x':
         print("\nHave a nice day :)")
         return 0
                 
+category = choose_category()
+filename = categories[category][1]
+
 # Main loop
 while True:
     # Show all modes in this program
@@ -152,4 +190,3 @@ while True:
 
     # Choice to open file mode
     if choose_mode(choice) == 0: break
-    
