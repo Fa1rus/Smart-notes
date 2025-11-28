@@ -1,3 +1,5 @@
+import datetime
+
 print("Hello, welcome to Smart Notes")
 
 choices = {
@@ -8,7 +10,6 @@ choices = {
     'Edit': 'e',
     'Exit':'x'
 }
-
 categories = {
     '1': ("Personal", "personal.txt"),
     '2': ("Study", "study.txt"),
@@ -17,6 +18,13 @@ categories = {
 }
 
 filename = 'notes.txt'
+
+def time():
+    date = datetime.datetime.now()
+    dateFormat = "%Y-%m-%d %H:%M"
+    date = date.strftime(dateFormat)
+    return date
+
 
 # Check if users are choose the righ choice
 def check_choice():
@@ -54,9 +62,10 @@ def valid_number():
             return int(numCheck)
 
 def write_note():
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     words = input("Write a note: ")
     with open(filename,'a') as f:
-        f.write(words + '\n')
+        f.write(f'[{timestamp}] {words} \n')
 
 def show_notes():
     try:
